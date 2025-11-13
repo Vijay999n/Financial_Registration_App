@@ -1,36 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Customer Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Registration</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Customer Registration</h1>
+<body class="bg-gray-50 font-sans">
+  <div class="max-w-lg mx-auto bg-white p-8 mt-8 rounded-2xl shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Customer Registration</h2>
 
-    <form action="/submit" method="POST" enctype="multipart/form-data" class="space-y-4">
-      <input name="name" placeholder="Full Name" class="w-full p-2 border rounded" required>
-      <input name="mobile" placeholder="Mobile Number" class="w-full p-2 border rounded" required>
-      <input name="address" placeholder="Address" class="w-full p-2 border rounded" required>
-      <input name="father_name" placeholder="Father's Name" class="w-full p-2 border rounded" required>
-      <input name="mother_name" placeholder="Mother's Name" class="w-full p-2 border rounded" required>
-      <input name="reference_contact" placeholder="Reference Contact" class="w-full p-2 border rounded" required>
+    <form id="regForm" action="/submit" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <input name="name" placeholder="Full Name" required class="w-full p-2 border rounded" />
+      <input name="mobile" placeholder="Mobile Number" required class="w-full p-2 border rounded" />
+      <input name="address" placeholder="Address" required class="w-full p-2 border rounded" />
+      <input name="father_name" placeholder="Father's Name" required class="w-full p-2 border rounded" />
+      <input name="mother_name" placeholder="Mother's Name" required class="w-full p-2 border rounded" />
 
-      <label class="block">Aadhaar Card:</label>
-      <input type="file" name="aadhaar" accept="image/*" required class="block w-full border p-2 rounded">
+      <input name="ref_name" placeholder="Reference Name" required class="w-full p-2 border rounded" />
+      <input name="ref_contact" placeholder="Reference Contact Number" required class="w-full p-2 border rounded" />
 
-      <label class="block">PAN Card:</label>
-      <input type="file" name="pan" accept="image/*" required class="block w-full border p-2 rounded">
+      <label class="block font-semibold mt-4">Upload Aadhaar Card:</label>
+      <input type="file" name="aadhaar" accept="image/*" required class="w-full border rounded p-2" />
 
-      <label class="block">Blank Cheque:</label>
-      <input type="file" name="cheque" accept="image/*" required class="block w-full border p-2 rounded">
+      <label class="block font-semibold mt-2">Upload PAN Card:</label>
+      <input type="file" name="pan" accept="image/*" required class="w-full border rounded p-2" />
 
-      <button type="submit" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">
-        Submit & Pay ₹99
+      <!-- Payment Section -->
+      <div class="mt-6 text-center">
+        <p class="font-semibold text-gray-700 mb-2">Pay ₹99 via UPI before submitting:</p>
+        <a id="upiButton"
+           href="upi://pay?pa=7022118670@ybl&pn=Financial+Registration&am=99&cu=INR"
+           class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-block"
+           target="_blank">
+          Pay Now with UPI
+        </a>
+
+        <!-- Optional QR Code -->
+        <div class="mt-4 text-center">
+          <p class="text-gray-600 text-sm">Or scan this QR to pay:</p>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=7022118670@ybl&pn=Financial+Registration&am=99&cu=INR"
+               alt="UPI QR Code" class="mx-auto mt-2">
+        </div>
+      </div>
+
+      <button id="submitBtn"
+        type="submit"
+        class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded mt-4 opacity-50 cursor-not-allowed"
+        disabled>
+        Submit Registration
       </button>
     </form>
   </div>
+
+  <script>
+    const upiButton = document.getElementById("upiButton");
+    const submitBtn = document.getElementById("submitBtn");
+
+    upiButton.addEventListener("click", () => {
+      alert("Once payment is complete, you can now submit the form.");
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+      submitBtn.classList.add("hover:bg-blue-700");
+    });
+  </script>
 </body>
 </html>
