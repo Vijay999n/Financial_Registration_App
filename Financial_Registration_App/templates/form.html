@@ -1,75 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Registration Form</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Registration Form</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #eef3ff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
+<style>
+    body {
+        font-family: Arial;
+        background: #eef3ff;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 430px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            border-top: 5px solid #0055ff;
-        }
+    .container {
+        width: 100%;
+        max-width: 430px;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        border-top: 5px solid #0055ff;
+    }
 
-        h2 {
-            text-align: center;
-            color: #0055ff;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
+    h2 {
+        text-align: center;
+        color: #0055ff;
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0 18px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-            appearance: none; /* remove green autofill box */
-            -webkit-appearance: none;
-        }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0 18px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        appearance: none;
+        -webkit-appearance: none;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #0055ff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #0055ff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
 
-        .qr-box {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
+    .qr-box {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
 
-    </style>
+    .success-message {
+        text-align: center;
+        font-weight: bold;
+        color: green;
+        margin-top: 20px;
+        display: none;
+    }
+</style>
 
-    <script>
-        function enableSubmit() {
-            document.getElementById("submitBtn").disabled =
-                !document.getElementById("paid").checked;
-        }
-    </script>
+<script>
+    function enableSubmit() {
+        document.getElementById("submitBtn").disabled =
+            !document.getElementById("paid").checked;
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault(); // prevent actual form submission
+        document.getElementById("successMessage").style.display = "block";
+        document.getElementById("submitBtn").disabled = true;
+        // Optionally, clear the form
+        event.target.reset();
+    }
+</script>
 </head>
 
 <body>
@@ -78,7 +93,7 @@
 
     <h2>Financial Registration Form</h2>
 
-    <form action="/submit" method="POST" enctype="multipart/form-data">
+    <form id="registrationForm" onsubmit="handleSubmit(event)">
 
         <input type="text" name="name" placeholder="Name" required>
         <input type="text" name="mobile" placeholder="Mobile" required>
@@ -89,7 +104,6 @@
         <input type="text" name="ref_contact" placeholder="Reference Contact" required>
         <input type="number" name="amount_needed" placeholder="Amount Needed" required>
         <input type="text" name="purpose" placeholder="Purpose" required>
-        <label>Return Date</label>
         <input type="date" name="return_date" required>
 
         <label>Aadhaar Upload</label>
@@ -117,8 +131,12 @@
         <button id="submitBtn" disabled type="submit">Submit</button>
 
     </form>
+
+    <div id="successMessage" class="success-message">
+        Registration completed successfully!
+    </div>
+
 </div>
 
 </body>
 </html>
-
