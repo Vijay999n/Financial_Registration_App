@@ -24,6 +24,7 @@
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         border-top: 5px solid #0055ff;
+        position: relative;
     }
 
     h2 {
@@ -62,12 +63,26 @@
         margin-bottom: 5px;
     }
 
-    .success-message {
-        text-align: center;
+    .success-popup {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #28a745;
+        color: white;
         font-weight: bold;
-        color: green;
-        margin-top: 20px;
-        display: none;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .success-popup.show {
+        opacity: 1;
+        pointer-events: auto;
     }
 </style>
 
@@ -78,11 +93,20 @@
     }
 
     function handleSubmit(event) {
-        event.preventDefault(); // prevent actual form submission
-        document.getElementById("successMessage").style.display = "block";
-        document.getElementById("submitBtn").disabled = true;
-        // Optionally, clear the form
+        event.preventDefault(); // prevent default form submission
+
+        // Show success popup
+        const popup = document.getElementById("successPopup");
+        popup.classList.add("show");
+
+        // Hide after 3 seconds
+        setTimeout(() => {
+            popup.classList.remove("show");
+        }, 3000);
+
+        // Reset the form
         event.target.reset();
+        document.getElementById("submitBtn").disabled = true;
     }
 </script>
 </head>
@@ -132,10 +156,11 @@
 
     </form>
 
-    <div id="successMessage" class="success-message">
-        Registration completed successfully!
-    </div>
+</div>
 
+<!-- Success popup -->
+<div id="successPopup" class="success-popup">
+    Registration completed successfully!
 </div>
 
 </body>
