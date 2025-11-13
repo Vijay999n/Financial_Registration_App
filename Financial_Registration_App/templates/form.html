@@ -1,81 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Financial Registration</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 font-sans">
-  <div class="max-w-lg mx-auto bg-white p-8 mt-8 rounded-2xl shadow-md">
-    <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Customer Registration</h2>
+from flask import Flask, render_template, request
+import os
+import csv
 
-    <form id="regForm" action="/submit" method="POST" enctype="multipart/form-data" class="space-y-4">
-      <input name="name" placeholder="Full Name" required class="w-full p-2 border rounded" />
-      <input name="mobile" placeholder="Mobile Number" required class="w-full p-2 border rounded" />
-      <input name="address" placeholder="Address" required class="w-full p-2 border rounded" />
-      <input name="father_name" placeholder="Father's Name" required class="w-full p-2 border rounded" />
-      <input name="mother_name" placeholder="Mother's Name" required class="w-full p-2 border rounded" />
+app = Flask(__name__)
 
-      <input name="ref_name" placeholder="Reference Name" required class="w-full p-2 border rounded" />
-      <input name="ref_contact" placeholder="Reference Contact Number" required class="w-full p-2 border rounded" />
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-      <label class="block font-semibold mt-4">Upload Aadhaar Card:</label>
-      <input type="file" name="aadhaar" accept="image/*" required class="w-full border rounded p-2" />
+@app.route("/")
+def home():
+    return render_template("form.html")
 
-      <label class="block font-semibold mt-2">Upload PAN Card:</label>
-      <input type="file" name="pan" accept="image/*" required class="w-full border rounded p-2" />
+@app.route("/submit", methods=["POST"])
+def submit():
+    name = request.form["name"]
+    mobile = request.form["mobile"]
+    address = request.form["address"]
+    father_name = request.form["father_name"]
+    mother_name = request.form["mother_name"]
+    ref_name = request.form["ref_name"]
+    ref_contact = request.form["ref_contact"]
+    amount_needed = request.form["amount_needed"]
+    purpose = request.form["purpose"]
+    return_date = request.form["return_date"]
 
-      <!-- Payment Section -->
-      <div class="mt-6 text-center">
-        <p class="font-semibold text-gray-700 mb-2">Pay ₹99 via UPI before submitting:</p>
+    aadhaar = request.files["aadhaar"]
+    pan = request.files["pan"]
 
-        <!-- UPI Payment Button -->
-        <a id="upiButton"
-           href="upi://pay?pa=7022118670@ybl&pn=Financial+Registration&am=99&cu=INR"
-           class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-block"
-           target="_blank">
-          Pay Now with UPI
-        </a>
+    aadhaar_path = os.path.join(UPLOAD_FOLDER, f"{name}_aadhaar.jpg")
+    pan_path = os.path.join(UPLOAD_FOLDER, f"{name}_pan.jpg")
 
-        <!-- QR Code -->
-        <div class="mt-4 text-center">
-          <p class="text-gray-600 text-sm">Or scan this QR to pay:</p>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=7022118670@ybl&pn=Financial+Registration&am=99&cu=INR"
-               alt="UPI QR Code" class="mx-auto mt-2">
-        </div>
+    aadhaar.save(aadhaar_path)
+    pan.save(pan_path)
 
-        <!-- Payment Confirmation Checkbox -->
-        <div class="mt-4 flex items-center justify-center">
-          <input type="checkbox" id="paidCheck" class="mr-2" />
-          <label for="paidCheck" class="text-gray-700 text-sm">I have completed the ₹99 payment</label>
-        </div>
-      </div>
+    csv_file = "registrations.csv"
+    headers = [
+        "Name", "Mobile", "Address", "Father Name", "Mother Name",
+        "Ref Name", "Ref Contact", "Amount Needed", "Purpose", "Return Date"
+    ]
 
-      <!-- Submit Button -->
-      <button id="submitBtn"
-        type="submit"
-        class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded mt-4 opacity-50 cursor-not-allowed"
-        disabled>
-        Submit Registration
-      </button>
-    </form>
-  </div>
+    file_exists = os.path.isfile(csv_file)
+    with open(csv_file, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(headers)
+        writer.writerow([
+            name, mobile, address, father_name, mother_name,
+            ref_name, ref_contact, amount_needed, purpose, return_date
+        ])
 
-  <script>
-    const paidCheck = document.getElementById("paidCheck");
-    const submitBtn = document.getElementById("submitBtn");
+    return "✅ Registration submitted successfully! Thank you."
 
-    paidCheck.addEventListener("change", () => {
-      if (paidCheck.checked) {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
-        submitBtn.classList.add("hover:bg-blue-700");
-      } else {
-        submitBtn.disabled = true;
-        submitBtn.classList.add("opacity-50", "cursor-not-allowed");
-      }
-    });
-  </script>
-</body>
-</html>
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
