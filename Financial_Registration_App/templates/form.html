@@ -9,29 +9,39 @@
         body {
             font-family: Arial;
             background: #eef3ff;
-            padding: 30px;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
+
         .container {
-            width: 450px;
-            margin: auto;
+            width: 100%;
+            max-width: 430px;
             background: #fff;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             border-top: 5px solid #0055ff;
         }
+
         h2 {
             text-align: center;
             color: #0055ff;
             margin-bottom: 20px;
+            font-size: 22px;
         }
+
         input {
             width: 100%;
             padding: 10px;
             margin: 10px 0 18px;
             border: 1px solid #ccc;
             border-radius: 6px;
+            font-size: 15px;
         }
+
         button {
             width: 100%;
             padding: 12px;
@@ -43,18 +53,31 @@
             font-size: 16px;
             margin-top: 10px;
         }
+
         .upi-btn {
             background: #00b900;
+        }
+
+        .qr-box {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .pay-link {
+            display: block;
+            background: #00b900;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
         }
     </style>
 
     <script>
-        // Manual amount – always works
-        function payUPI() {
-            window.location.href =
-            "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&cu=INR";
-        }
-
         function enableSubmit() {
             document.getElementById("submitBtn").disabled =
                 !document.getElementById("paid").checked;
@@ -71,23 +94,14 @@
     <form action="/submit" method="POST" enctype="multipart/form-data">
 
         <input type="text" name="name" placeholder="Name" required>
-
         <input type="text" name="mobile" placeholder="Mobile" required>
-
         <input type="text" name="address" placeholder="Address" required>
-
         <input type="text" name="father_name" placeholder="Father Name" required>
-
         <input type="text" name="mother_name" placeholder="Mother Name" required>
-
         <input type="text" name="ref_name" placeholder="Reference Name" required>
-
         <input type="text" name="ref_contact" placeholder="Reference Contact" required>
-
         <input type="number" name="amount_needed" placeholder="Amount Needed" required>
-
         <input type="text" name="purpose" placeholder="Purpose" required>
-
         <input type="date" name="return_date" required>
 
         <label>Aadhaar Upload</label>
@@ -96,12 +110,22 @@
         <label>PAN Upload</label>
         <input type="file" name="pan" accept="image/*" required>
 
-        <h3>Stamp Paper Fee: ₹99</h3>
+        <h3 style="text-align:center; color:#333;">Stamp Paper Fee: <b>₹99</b></h3>
 
-        <button type="button" class="upi-btn" onclick="payUPI()">Pay via UPI</button>
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7022118670@ybl&pn=Financial+Registration&cu=INR"
+                 width="200">
+        </div>
 
-        <input type="checkbox" id="paid" onclick="enableSubmit()">
-        I confirm I have paid the amount.
+        <a class="pay-link"
+           href="upi://pay?pa=7022118670@ybl&pn=Financial+Registration&cu=INR">
+           Pay Using Any UPI App (Enter ₹99)
+        </a>
+
+        <div style="margin-top:15px;">
+            <input type="checkbox" id="paid" onclick="enableSubmit()">
+            I confirm I have paid ₹99.
+        </div>
 
         <button id="submitBtn" disabled type="submit">Submit</button>
 
