@@ -4,6 +4,7 @@ import csv
 
 app = Flask(__name__)
 
+# Folder to store uploaded Aadhaar & PAN
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -24,6 +25,7 @@ def submit():
     purpose = request.form["purpose"]
     return_date = request.form["return_date"]
 
+    # File uploads
     aadhaar = request.files["aadhaar"]
     pan = request.files["pan"]
 
@@ -33,10 +35,12 @@ def submit():
     aadhaar.save(aadhaar_path)
     pan.save(pan_path)
 
+    # Save to CSV
     csv_file = "registrations.csv"
     headers = [
         "Name", "Mobile", "Address", "Father Name", "Mother Name",
-        "Ref Name", "Ref Contact", "Amount Needed", "Purpose", "Return Date"
+        "Reference Name", "Reference Contact", "Amount Needed",
+        "Purpose", "Return Date"
     ]
 
     file_exists = os.path.isfile(csv_file)
