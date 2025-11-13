@@ -49,11 +49,10 @@
     </style>
 
     <script>
+        // Manual amount – always works
         function payUPI() {
-            const url =
-                "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&am=99&cu=INR&mode=02&purpose=Fees";
-
-            window.location.href = url;
+            window.location.href =
+            "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&cu=INR";
         }
 
         function enableSubmit() {
@@ -99,7 +98,7 @@
 
         <h3>Stamp Paper Fee: ₹99</h3>
 
-        <button type="button" class="upi-btn" onclick="payUPI()">Pay ₹99 UPI</button>
+        <button type="button" class="upi-btn" onclick="payUPI()">Pay via UPI</button>
 
         <input type="checkbox" id="paid" onclick="enableSubmit()">
         I confirm I have paid the amount.
