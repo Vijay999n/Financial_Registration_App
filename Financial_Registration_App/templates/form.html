@@ -50,8 +50,10 @@
 
     <script>
         function payUPI() {
-            window.location.href =
-            "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&am=99&cu=INR";
+            const url =
+                "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&am=99&cu=INR&mode=02&purpose=Fees";
+
+            window.location.href = url;
         }
 
         function enableSubmit() {
