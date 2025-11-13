@@ -20,6 +20,9 @@ def submit():
     mother_name = request.form["mother_name"]
     ref_name = request.form["ref_name"]
     ref_contact = request.form["ref_contact"]
+    amount_needed = request.form["amount_needed"]
+    purpose = request.form["purpose"]
+    return_date = request.form["return_date"]
 
     aadhaar = request.files["aadhaar"]
     pan = request.files["pan"]
@@ -31,14 +34,20 @@ def submit():
     pan.save(pan_path)
 
     csv_file = "registrations.csv"
-    headers = ["Name", "Mobile", "Address", "Father Name", "Mother Name", "Ref Name", "Ref Contact"]
+    headers = [
+        "Name", "Mobile", "Address", "Father Name", "Mother Name",
+        "Ref Name", "Ref Contact", "Amount Needed", "Purpose", "Return Date"
+    ]
 
     file_exists = os.path.isfile(csv_file)
     with open(csv_file, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         if not file_exists:
             writer.writerow(headers)
-        writer.writerow([name, mobile, address, father_name, mother_name, ref_name, ref_contact])
+        writer.writerow([
+            name, mobile, address, father_name, mother_name,
+            ref_name, ref_contact, amount_needed, purpose, return_date
+        ])
 
     return "✅ Registration submitted successfully! Thank you."
 
