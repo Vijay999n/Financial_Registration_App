@@ -1,55 +1,111 @@
-from flask import Flask, render_template, request
-import os
-import csv
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Registration Form</title>
 
-app = Flask(__name__)
+    <style>
+        body {
+            font-family: Arial;
+            background: #eef3ff;
+            padding: 30px;
+        }
+        .container {
+            width: 450px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-top: 5px solid #0055ff;
+        }
+        h2 {
+            text-align: center;
+            color: #0055ff;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 18px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0055ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .upi-btn {
+            background: #00b900;
+        }
+    </style>
 
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    <script>
+        function payUPI() {
+            window.location.href =
+            "upi://pay?pa=7022118670@ybl&pn=Financial%20Registration&am=99&cu=INR";
+        }
 
-@app.route("/")
-def home():
-    return render_template("form.html")
+        function enableSubmit() {
+            document.getElementById("submitBtn").disabled =
+                !document.getElementById("paid").checked;
+        }
+    </script>
+</head>
 
-@app.route("/submit", methods=["POST"])
-def submit():
-    name = request.form["name"]
-    mobile = request.form["mobile"]
-    address = request.form["address"]
-    father_name = request.form["father_name"]
-    mother_name = request.form["mother_name"]
-    ref_name = request.form["ref_name"]
-    ref_contact = request.form["ref_contact"]
-    amount_needed = request.form["amount_needed"]
-    purpose = request.form["purpose"]
-    return_date = request.form["return_date"]
+<body>
 
-    aadhaar = request.files["aadhaar"]
-    pan = request.files["pan"]
+<div class="container">
 
-    aadhaar_path = os.path.join(UPLOAD_FOLDER, f"{name}_aadhaar.jpg")
-    pan_path = os.path.join(UPLOAD_FOLDER, f"{name}_pan.jpg")
+    <h2>Financial Registration Form</h2>
 
-    aadhaar.save(aadhaar_path)
-    pan.save(pan_path)
+    <form action="/submit" method="POST" enctype="multipart/form-data">
 
-    csv_file = "registrations.csv"
-    headers = [
-        "Name", "Mobile", "Address", "Father Name", "Mother Name",
-        "Ref Name", "Ref Contact", "Amount Needed", "Purpose", "Return Date"
-    ]
+        <input type="text" name="name" placeholder="Name" required>
 
-    file_exists = os.path.isfile(csv_file)
-    with open(csv_file, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        if not file_exists:
-            writer.writerow(headers)
-        writer.writerow([
-            name, mobile, address, father_name, mother_name,
-            ref_name, ref_contact, amount_needed, purpose, return_date
-        ])
+        <input type="text" name="mobile" placeholder="Mobile" required>
 
-    return "✅ Registration submitted successfully! Thank you."
+        <input type="text" name="address" placeholder="Address" required>
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+        <input type="text" name="father_name" placeholder="Father Name" required>
+
+        <input type="text" name="mother_name" placeholder="Mother Name" required>
+
+        <input type="text" name="ref_name" placeholder="Reference Name" required>
+
+        <input type="text" name="ref_contact" placeholder="Reference Contact" required>
+
+        <input type="number" name="amount_needed" placeholder="Amount Needed" required>
+
+        <input type="text" name="purpose" placeholder="Purpose" required>
+
+        <input type="date" name="return_date" required>
+
+        <label>Aadhaar Upload</label>
+        <input type="file" name="aadhaar" accept="image/*" required>
+
+        <label>PAN Upload</label>
+        <input type="file" name="pan" accept="image/*" required>
+
+        <h3>Stamp Paper Fee: ₹99</h3>
+
+        <button type="button" class="upi-btn" onclick="payUPI()">Pay ₹99 UPI</button>
+
+        <input type="checkbox" id="paid" onclick="enableSubmit()">
+        I confirm I have paid the amount.
+
+        <button id="submitBtn" disabled type="submit">Submit</button>
+
+    </form>
+</div>
+
+</body>
+</html>
