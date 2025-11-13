@@ -24,7 +24,6 @@ def submit():
     purpose = request.form["purpose"]
     return_date = request.form["return_date"]
 
-    # File uploads
     aadhaar = request.files["aadhaar"]
     pan = request.files["pan"]
 
@@ -34,7 +33,6 @@ def submit():
     aadhaar.save(aadhaar_path)
     pan.save(pan_path)
 
-    # Save to CSV
     csv_file = "registrations.csv"
     headers = [
         "Name", "Mobile", "Address", "Father Name", "Mother Name",
