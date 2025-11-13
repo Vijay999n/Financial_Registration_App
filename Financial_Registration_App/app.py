@@ -24,18 +24,17 @@ def submit():
     purpose = request.form["purpose"]
     return_date = request.form["return_date"]
 
-    # Uploaded documents
+    # File uploads
     aadhaar = request.files["aadhaar"]
     pan = request.files["pan"]
 
-    # Save uploaded files
     aadhaar_path = os.path.join(UPLOAD_FOLDER, f"{name}_aadhaar.jpg")
     pan_path = os.path.join(UPLOAD_FOLDER, f"{name}_pan.jpg")
 
     aadhaar.save(aadhaar_path)
     pan.save(pan_path)
 
-    # Save data into CSV file
+    # Save to CSV
     csv_file = "registrations.csv"
     headers = [
         "Name", "Mobile", "Address", "Father Name", "Mother Name",
@@ -53,7 +52,7 @@ def submit():
             ref_name, ref_contact, amount_needed, purpose, return_date
         ])
 
-    return "✅ Registration submitted successfully!"
+    return "Registration submitted successfully!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
