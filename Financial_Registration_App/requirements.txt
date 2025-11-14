@@ -1,2 +1,2 @@
 Flask==2.3.2
-PyGithub==1.76
+PyGithub==2.8.1
