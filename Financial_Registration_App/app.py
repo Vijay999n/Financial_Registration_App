@@ -25,7 +25,7 @@ if not os.path.exists(CSV_FILE):
 
 @app.route('/')
 def index():
-    return render_template('iform.html')
+    return render_template('form.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -88,4 +88,5 @@ def submit():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+
 
