@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import csv
 import os
+from werkzeug.utils import secure_filename
+import git
 
 app = Flask(__name__)
 
@@ -23,7 +25,7 @@ if not os.path.exists(CSV_FILE):
 
 @app.route('/')
 def index():
-    return render_template('form.html')
+    return render_template('iform.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -42,17 +44,17 @@ def submit():
 
     # Save uploaded files
     aadhaar_file = request.files['aadhaar']
-    aadhaar_filename = os.path.join(UPLOAD_FOLDER, aadhaar_file.filename)
+    aadhaar_filename = os.path.join(UPLOAD_FOLDER, secure_filename(aadhaar_file.filename))
     aadhaar_file.save(aadhaar_filename)
     data['Aadhaar File'] = aadhaar_filename
 
     pan_file = request.files['pan']
-    pan_filename = os.path.join(UPLOAD_FOLDER, pan_file.filename)
+    pan_filename = os.path.join(UPLOAD_FOLDER, secure_filename(pan_file.filename))
     pan_file.save(pan_filename)
     data['PAN File'] = pan_filename
 
     self_image_file = request.files['self_image']
-    self_image_filename = os.path.join(UPLOAD_FOLDER, self_image_file.filename)
+    self_image_filename = os.path.join(UPLOAD_FOLDER, secure_filename(self_image_file.filename))
     self_image_file.save(self_image_filename)
     data['Self Image File'] = self_image_filename
 
@@ -66,9 +68,23 @@ def submit():
             data['Aadhaar File'], data['PAN File'], data['Self Image File']
         ])
 
+    # --- Push CSV to GitHub ---
+    try:
+        GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Set in Render environment
+        GITHUB_REPO = f"https://{GITHUB_TOKEN}@github.com/<username>/<repo>.git"  # Replace <username>/<repo>
+        
+        repo_dir = os.getcwd()
+        repo = git.Repo(repo_dir)
+        repo.git.add(CSV_FILE)
+        repo.index.commit("Update registrations.csv")
+        repo.git.push(GITHUB_REPO, repo.active_branch.name)
+        print("CSV pushed to GitHub successfully.")
+    except Exception as e:
+        print("Git push failed:", e)
+    # -----------------------------
+
     return render_template('success.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
-
+    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
