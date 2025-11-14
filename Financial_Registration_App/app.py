@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import csv
 import os
 from werkzeug.utils import secure_filename
-import git
+from github import Github
 
 app = Flask(__name__)
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# CSV file to store registrations
+# CSV file to store registrations locally
 CSV_FILE = 'registrations.csv'
 
 # Ensure CSV header exists
@@ -58,7 +58,7 @@ def submit():
     self_image_file.save(self_image_filename)
     data['Self Image File'] = self_image_filename
 
-    # Append data to CSV
+    # Append data to local CSV
     with open(CSV_FILE, 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([
@@ -68,25 +68,31 @@ def submit():
             data['Aadhaar File'], data['PAN File'], data['Self Image File']
         ])
 
-    # --- Push CSV to GitHub ---
+    # --- Push CSV to GitHub using PyGithub ---
     try:
-        GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Set in Render environment
-        GITHUB_REPO = f"https://github.com/Vijay999n/Financial_Registration_App.git"  # Replace <username>/<repo>
-        
-        repo_dir = os.getcwd()
-        repo = git.Repo(repo_dir)
-        repo.git.add(CSV_FILE)
-        repo.index.commit("Update registrations.csv")
-        repo.git.push(GITHUB_REPO, repo.active_branch.name)
-        print("CSV pushed to GitHub successfully.")
+        GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Set in Render
+        GITHUB_REPO = "<username>/<repo>"  # Replace with your GitHub repo, e.g., vijayshankar/financial-registration
+        g = Github(GITHUB_TOKEN)
+        repo = g.get_repo(GITHUB_REPO)
+        CSV_PATH = "registrations.csv"
+
+        # Read local CSV content
+        with open(CSV_FILE, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        try:
+            file = repo.get_contents(CSV_PATH)
+            repo.update_file(file.path, "Update registrations.csv", content, file.sha)
+        except:
+            repo.create_file(CSV_PATH, "Create registrations.csv", content)
+
+        print("CSV updated on GitHub successfully.")
     except Exception as e:
-        print("Git push failed:", e)
-    # -----------------------------
+        print("Failed to update CSV on GitHub:", e)
+    # ---------------------------------------------
 
     return render_template('success.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
-
-
