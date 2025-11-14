@@ -6,193 +6,84 @@
 <title>Financial Registration Form / वित्तीय पंजीकरण फॉर्म</title>
 
 <style>
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-body {
-    font-family: Arial, sans-serif;
-    background: #eef3ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-.container {
-    width: 100%;
-    max-width: 430px;
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    border-top: 5px solid #0055ff;
-    box-sizing: border-box;
-    position: relative;
-}
-h2 {
-    text-align: center;
-    color: #0055ff;
-    margin-bottom: 20px;
-    font-size: 22px;
-}
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-    box-sizing: border-box;
-}
-label {
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-}
-button {
-    width: 100%;
-    padding: 12px;
-    background: #0055ff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-}
-.qr-box {
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-#returnAmountDiv {
-    display: none;
-}
-.success-message {
-    display: none;
-    text-align: center;
-    background: #28a745;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-@media (max-height: 700px) {
-    body {
-        align-items: flex-start;
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-}
+body { font-family: Arial,sans-serif; background:#eef3ff; display:flex; justify-content:center; align-items:center; padding:20px;}
+.container { width:100%; max-width:430px; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.15); border-top:5px solid #0055ff;}
+h2 { text-align:center; color:#0055ff; margin-bottom:20px; font-size:22px; }
+input, select { width:100%; padding:10px; margin:10px 0 8px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+label { font-size:14px; color:#333; display:block; margin-bottom:5px; }
+button { width:100%; padding:12px; background:#0055ff; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-top:10px; }
+.qr-box { text-align:center; margin-top:10px; margin-bottom:5px; }
+#returnAmountDiv { display:none; }
 </style>
 
 <script>
-// Enable submit only if checkbox is checked
-function enableSubmit() {
-    document.getElementById("submitBtn").disabled =
-        !document.getElementById("paid").checked;
-}
-
-// Show return date field if Amount Needed > 0
 function checkAmount() {
     const amount = document.getElementById("amount_needed").value;
     const returnDiv = document.getElementById("returnAmountDiv");
-    if (amount && parseFloat(amount) > 0) {
-        returnDiv.style.display = "block";
-    } else {
-        returnDiv.style.display = "none";
-    }
-}
-
-// Handle form submission dynamically
-function handleSubmit(event) {
-    event.preventDefault(); // prevent actual submission
-
-    // Show success message
-    const form = document.getElementById("registrationForm");
-    form.style.display = "none"; // hide the form
-
-    const message = document.getElementById("successMessage");
-    message.style.display = "block";
+    if(amount && parseFloat(amount) > 0) returnDiv.style.display="block";
+    else returnDiv.style.display="none";
 }
 </script>
 </head>
-
 <body>
-
 <div class="container">
+<h2>Financial Registration Form / वित्तीय पंजीकरण फॉर्म</h2>
 
-    <h2>Financial Registration Form / वित्तीय पंजीकरण फॉर्म</h2>
+<form action="/submit" method="POST" enctype="multipart/form-data">
+    <label>Name / नाम</label>
+    <input type="text" name="name" placeholder="Enter Name / नाम दर्ज करें" required>
 
-    <form id="registrationForm" onsubmit="handleSubmit(event)">
+    <label>Mobile / मोबाइल</label>
+    <input type="text" name="mobile" placeholder="Enter Mobile No / मोबाइल नंबर दर्ज करें" required>
 
-        <label>Name / नाम</label>
-        <input type="text" name="name" placeholder="Enter Name / नाम दर्ज करें" required>
+    <label>Address / पता</label>
+    <input type="text" name="address" placeholder="Enter Address / पता दर्ज करें" required>
 
-        <label>Mobile / मोबाइल</label>
-        <input type="text" name="mobile" placeholder="Enter Mobile No / मोबाइल नंबर दर्ज करें" required>
+    <label>Father Name / पिता का नाम</label>
+    <input type="text" name="father_name" placeholder="Enter Father Name / पिता का नाम दर्ज करें" required>
 
-        <label>Address / पता</label>
-        <input type="text" name="address" placeholder="Enter Address / पता दर्ज करें" required>
+    <label>Mother Name / माता का नाम</label>
+    <input type="text" name="mother_name" placeholder="Enter Mother Name / माता का नाम दर्ज करें" required>
 
-        <label>Father Name / पिता का नाम</label>
-        <input type="text" name="father_name" placeholder="Enter Father Name / पिता का नाम दर्ज करें" required>
+    <label>Reference Name / संदर्भ का नाम</label>
+    <input type="text" name="ref_name" placeholder="Enter Reference Name / संदर्भ का नाम दर्ज करें" required>
 
-        <label>Mother Name / माता का नाम</label>
-        <input type="text" name="mother_name" placeholder="Enter Mother Name / माता का नाम दर्ज करें" required>
+    <label>Reference Contact / संदर्भ संपर्क</label>
+    <input type="text" name="ref_contact" placeholder="Enter Reference Contact / संदर्भ संपर्क दर्ज करें" required>
 
-        <label>Reference Name / संदर्भ का नाम</label>
-        <input type="text" name="ref_name" placeholder="Enter Reference Name / संदर्भ का नाम दर्ज करें" required>
+    <label>Amount Needed / आवश्यक राशि</label>
+    <input type="number" name="amount_needed" id="amount_needed" placeholder="Enter Amount / राशि दर्ज करें" required oninput="checkAmount()">
 
-        <label>Reference Contact / संदर्भ संपर्क</label>
-        <input type="text" name="ref_contact" placeholder="Enter Reference Contact / संदर्भ संपर्क दर्ज करें" required>
-
-        <label>Amount Needed / आवश्यक राशि</label>
-        <input type="number" name="amount_needed" id="amount_needed" placeholder="Enter Amount / राशि दर्ज करें" required oninput="checkAmount()">
-
-        <div id="returnAmountDiv">
-            <label>Return Date / वापसी की तारीख</label>
-            <input type="date" name="return_date">
-        </div>
-
-        <label>Purpose / उद्देश्य</label>
-        <input type="text" name="purpose" placeholder="Enter Purpose / उद्देश्य दर्ज करें" required>
-
-        <label>Aadhaar Upload / आधार अपलोड</label>
-        <input type="file" name="aadhaar" accept="image/*" required>
-
-        <label>PAN Upload / पैन अपलोड</label>
-        <input type="file" name="pan" accept="image/*" required>
-
-        <label>Self Image / अपनी तस्वीर</label>
-        <input type="file" name="self_image" accept="image/*" required>
-
-        <h3 style="text-align:center; color:#333;">Stamp Paper Fee: <b>₹99</b> / स्टाम्प शुल्क: <b>₹99</b></h3>
-        <h3 style="text-align:center; color:#333;">Mobile No: <b>7022118670</b> / मोबाइल नंबर: <b>7022118670</b></h3>
-
-        <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7022118670@ybl&pn=Financial+Registration&cu=INR"
-                 width="200">
-        </div>
-
-        <div style="margin-top:15px;">
-            <input type="checkbox" id="paid" onclick="enableSubmit()">
-            I confirm I have paid ₹99 / मैंने ₹99 का भुगतान किया है
-        </div>
-
-        <button id="submitBtn" disabled type="submit">Submit / जमा करें</button>
-
-    </form>
-
-    <!-- Success message -->
-    <div id="successMessage" class="success-message">
-        <h2>Registration Completed Successfully! / पंजीकरण सफलतापूर्वक पूर्ण हुआ!</h2>
-        <p>Thank you for your submission. / आपके सबमिशन के लिए धन्यवाद।</p>
+    <div id="returnAmountDiv">
+        <label>Return Date / वापसी की तारीख</label>
+        <input type="date" name="return_date">
     </div>
 
-</div>
+    <label>Purpose / उद्देश्य</label>
+    <input type="text" name="purpose" placeholder="Enter Purpose / उद्देश्य दर्ज करें" required>
 
+    <label>Aadhaar Upload / आधार अपलोड</label>
+    <input type="file" name="aadhaar" accept="image/*" required>
+
+    <label>PAN Upload / पैन अपलोड</label>
+    <input type="file" name="pan" accept="image/*" required>
+
+    <label>Self Image / अपनी तस्वीर</label>
+    <input type="file" name="self_image" accept="image/*" required>
+
+    <h3 style="text-align:center; color:#333;">Stamp Paper Fee: <b>₹99</b> / स्टाम्प शुल्क: <b>₹99</b></h3>
+    <h3 style="text-align:center; color:#333;">Mobile No: <b>7022118670</b> / मोबाइल नंबर: <b>7022118670</b></h3>
+
+    <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7022118670@ybl&pn=Financial+Registration&cu=INR" width="200">
+    </div>
+
+    <div style="margin-top:15px;">
+        <input type="checkbox" required> I confirm I have paid ₹99 / मैंने ₹99 का भुगतान किया है
+    </div>
+
+    <button type="submit">Submit / जमा करें</button>
+</form>
+</div>
 </body>
 </html>
