@@ -6,112 +6,117 @@
 <title>Financial Registration Form / वित्तीय पंजीकरण फॉर्म</title>
 
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #eef3ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.container {
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border-top: 5px solid #0055ff;
+    box-sizing: border-box;
+    position: relative;
+}
+h2 {
+    text-align: center;
+    color: #0055ff;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background: #0055ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+.qr-box {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+#returnAmountDiv {
+    display: none;
+}
+.success-message {
+    display: none;
+    text-align: center;
+    background: #28a745;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+@media (max-height: 700px) {
     body {
-        font-family: Arial, sans-serif;
-        background: #eef3ff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
+        align-items: flex-start;
+        padding-top: 40px;
+        padding-bottom: 40px;
     }
-
-    .container {
-        width: 100%;
-        max-width: 430px;
-        background: #fff;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        border-top: 5px solid #0055ff;
-        position: relative;
-        box-sizing: border-box;
-    }
-
-    h2 {
-        text-align: center;
-        color: #0055ff;
-        margin-bottom: 20px;
-        font-size: 22px;
-    }
-
-    input {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0 8px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 15px;
-        box-sizing: border-box;
-    }
-
-    label {
-        font-size: 14px;
-        display: block;
-        margin-bottom: 5px;
-        color: #333;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        background: #0055ff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: 10px;
-    }
-
-    .qr-box {
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
-
-    #returnAmountDiv {
-        display: none;
-    }
-
-    @media (max-height: 700px) {
-        body {
-            align-items: flex-start;
-            padding-top: 40px;
-            padding-bottom: 40px;
-        }
-    }
+}
 </style>
 
 <script>
-    // Enable submit only if checkbox is checked
-    function enableSubmit() {
-        document.getElementById("submitBtn").disabled =
-            !document.getElementById("paid").checked;
-    }
+// Enable submit only if checkbox is checked
+function enableSubmit() {
+    document.getElementById("submitBtn").disabled =
+        !document.getElementById("paid").checked;
+}
 
-    // Show return date field if Amount Needed > 0
-    function checkAmount() {
-        const amount = document.getElementById("amount_needed").value;
-        const returnDiv = document.getElementById("returnAmountDiv");
-        if (amount && parseFloat(amount) > 0) {
-            returnDiv.style.display = "block";
-        } else {
-            returnDiv.style.display = "none";
-        }
+// Show return date field if Amount Needed > 0
+function checkAmount() {
+    const amount = document.getElementById("amount_needed").value;
+    const returnDiv = document.getElementById("returnAmountDiv");
+    if (amount && parseFloat(amount) > 0) {
+        returnDiv.style.display = "block";
+    } else {
+        returnDiv.style.display = "none";
     }
+}
 
-    // On submit, redirect to success page
-    function handleSubmit(event) {
-        event.preventDefault(); // prevent default form submission
-        // Normally you would submit to backend here
-        window.location.href = "success.html";
-    }
+// Handle form submission dynamically
+function handleSubmit(event) {
+    event.preventDefault(); // prevent actual submission
+
+    // Show success message
+    const form = document.getElementById("registrationForm");
+    form.style.display = "none"; // hide the form
+
+    const message = document.getElementById("successMessage");
+    message.style.display = "block";
+}
 </script>
 </head>
 
@@ -180,6 +185,12 @@
         <button id="submitBtn" disabled type="submit">Submit / जमा करें</button>
 
     </form>
+
+    <!-- Success message -->
+    <div id="successMessage" class="success-message">
+        <h2>Registration Completed Successfully! / पंजीकरण सफलतापूर्वक पूर्ण हुआ!</h2>
+        <p>Thank you for your submission. / आपके सबमिशन के लिए धन्यवाद।</p>
+    </div>
 
 </div>
 
