@@ -71,7 +71,7 @@ def submit():
     # --- Push CSV to GitHub ---
     try:
         GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # Set in Render environment
-        GITHUB_REPO = f"https://{GITHUB_TOKEN}@github.com/<username>/<repo>.git"  # Replace <username>/<repo>
+        GITHUB_REPO = f"https://github.com/Vijay999n/Financial_Registration_App.git"  # Replace <username>/<repo>
         
         repo_dir = os.getcwd()
         repo = git.Repo(repo_dir)
@@ -88,3 +88,4 @@ def submit():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+
